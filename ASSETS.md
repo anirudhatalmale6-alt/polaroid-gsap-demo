@@ -64,11 +64,21 @@ the photo will be hidden behind it.
 Square because the uploads are Instagram-style nail photos. A wide window
 centre-crops the fingertips off, which on a nails brand removes the subject.
 
-**Title and caption** ("BEFORE" / "the starting point"): bake them into the PNG
-if you want your exact brand font, or leave them off and I render them as live
-text. Live text is sharper and editable; baked is a guaranteed font match. Your
-call — I just need to know which, because a baked title in the PNG plus a
-rendered one on top would double up.
+**Title and caption are typed by the user, so leave them off the PNG entirely.**
+They are rendered as live text on top of the frame. That means the frame needs
+blank space for them: **162px clear above the hole and 180px clear below.** Put
+artwork in either band and the user's own words land on top of it.
+
+Both are pinned to a single line, and overlong input ends in an ellipsis rather
+than wrapping. That is deliberate: every resting position in the animation is a
+percentage *of the card*, so if a long caption could wrap to two lines the card
+would grow, the settled print would move, and this frame's proportions would no
+longer match. At the card's real size roughly **28 characters of title** and
+**44 of caption** fit before it truncates. If your form lets people type more
+than that, cap the field at those lengths and nobody ever sees an ellipsis.
+
+Send the font (or its name) if you want the live text in your brand face —
+otherwise it renders in the closest web-safe match.
 
 ---
 
@@ -92,10 +102,16 @@ Leave it out and I draw the stock.
 
 **No invoice artwork is needed.** The receipt content comes from your form
 fields and is rendered as live text, so it stays sharp at any size and changes
-with the form. I do need the actual field list to match the layout — mine is
-currently a guess (heading, number, date, line items, subtotal, total, footer) —
-and a decision on whether a long item name should truncate with an ellipsis
-(what it does now) or wrap onto a second line.
+with the form.
+
+Long item names **wrap onto a second line** (your call, 7 Sep) instead of
+truncating. The price stays on the first line, right-aligned, which is how a
+printed invoice reads. A single unbroken 40-character word still cannot push
+past the edge of the paper.
+
+The field list is still a guess on my side — heading, number, date, line items,
+subtotal, total, footer. Send the real one whenever it is ready and I match the
+layout to it.
 
 ---
 
@@ -103,10 +119,11 @@ and a decision on whether a long item name should truncate with an ellipsis
 
 One shutter click for the camera. WAV or MP3, either is fine.
 
-**Trim it hard to the first transient.** If there is 40ms of silence before the
-click, the click lands 40ms after the flash and reads as out of sync. That is
-not fixable at my end without guessing the offset, and guessing it is worse than
-you trimming it.
+You have said exact sync is not critical, so this is no longer a blocker — but
+if the file is easy to trim, **trim it to the first transient**. Leading silence
+delays the click by however long it is, and I cannot remove that at my end
+without guessing. The click and the flash fire off the same point in the
+timeline, so with a trimmed file they stay together however often it replays.
 
 A motor whir for the print ejecting and one for the paper feed are nice to have.
 Without any audio files at all the demo still works — the sounds are currently
@@ -117,9 +134,13 @@ assets. Real recordings are better; they are just not blocking.
 
 ## What I still do not have
 
-- The **WebM files** mentioned in the original brief — I have asked twice what is
-  in them. If they are a flash or a print-develop texture they drop straight into
-  the timeline; if they are reference recordings of the animation you want, they
-  are useful in a completely different way. Either is fine, I just need to know.
-- The **form field list** for the invoice.
-- Whether the card **title/caption is baked or live**.
+- The **camera body** and **card frame** exports, and the **printer body**
+  export, per the specs above. These are what actually block finishing.
+- The **form field list** for the invoice — not blocking, the layout works on
+  placeholders until it arrives.
+- The **shutter recording** — not blocking either, the sound is synthesised in
+  the browser meanwhile.
+
+Settled and no longer open: title and caption are live text (leave them off the
+frame), long item names wrap, the shutter does not have to be frame-accurate,
+and the WebM files are set aside.
