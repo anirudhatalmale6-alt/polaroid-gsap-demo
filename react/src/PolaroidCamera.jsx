@@ -302,7 +302,7 @@ const PolaroidCamera = forwardRef(function PolaroidCamera(
       {cameraSrc ? (
         <img className="pc-camera" src={cameraSrc} alt="" ref={cameraRef} draggable="false" />
       ) : (
-        <svg className="pc-camera" ref={cameraRef} viewBox="0 0 600 460" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <svg className="pc-camera" ref={cameraRef} viewBox="0 0 600 497" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
             <linearGradient id={id('shell')} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0" stopColor="#F6EFE4" /><stop offset="1" stopColor="#E6DACA" />
@@ -332,6 +332,10 @@ const PolaroidCamera = forwardRef(function PolaroidCamera(
             </filter>
           </defs>
 
+          {/* the body is drawn 556 units wide; scale it out so it reaches both
+              edges of the component - the client wants it device width, as if
+              the camera were being held */}
+          <g transform="translate(-23.741, 0) scale(1.07914)">
           <ellipse cx="300" cy="432" rx="250" ry="16" fill="#000" opacity="0.13" filter={url('soft')} />
 
           <rect x="34" y="318" width="532" height="112" rx="26" fill={url('base')} />
@@ -396,6 +400,7 @@ const PolaroidCamera = forwardRef(function PolaroidCamera(
             <rect x="471" y="175" width="68" height="22" rx="11" fill="#2b2118" />
             <circle ref={ledRef} cx="505" cy="186" r="9" fill="#F0A227" />
             <circle ref={ledGlowRef} cx="505" cy="186" r="20" fill="#F0A227" opacity="0.35" filter={url('soft')} />
+          </g>
           </g>
         </svg>
       )}

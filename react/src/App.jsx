@@ -13,12 +13,14 @@ export default function App() {
   return (
     <main className="page">
       <section className="hero">
+        <div className="copy">
         <p className="eyebrow">React + GSAP</p>
         <h1>Polaroid capture</h1>
         <p className="lede">
           One component, one import. Flash, shutter sound, recoil and both prints
           run off a single GSAP timeline.
         </p>
+        </div>
 
         <div className="camera-slot">
           <PolaroidCamera ref={cam} sound={sound} playOnView />
@@ -34,12 +36,14 @@ export default function App() {
       </section>
 
       <section className="hero">
+        <div className="copy">
         <p className="eyebrow">React + GSAP</p>
         <h1>Invoice printer</h1>
         <p className="lede">
           Ejects upward, in discrete line steps rather than a smooth glide.
           The paper travels; the heading leads because it is the top of the job.
         </p>
+        </div>
 
         <div className="camera-slot">
           <ReceiptPrinter ref={printer} sound={sound} playOnView />

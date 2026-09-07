@@ -152,3 +152,22 @@ advance line up.
 
 The leading edge stays straight, because paper still on the roll has a straight
 edge — a torn zigzag only makes sense after a tear-off, which isn't in there yet.
+
+---
+
+## Full-bleed sizing
+
+Both components are meant to be **device width** — the intent is that the user
+feels they are holding the camera or the printer, so the body reaches both edges
+of the screen with no gutter.
+
+The artwork is drawn on a 600-unit grid but the bodies were narrower than that
+(the camera shoulder is 556 units, the printer deck 520), which left a margin
+inside the component no amount of page CSS could remove. Each SVG now wraps its
+drawing in a group that scales it out to the full 600 — `scale(1.07914)` for the
+camera, `scale(1.153846)` for the printer — so the body itself is flush with the
+component edges. The stage aspect ratios and the print/paper widths were rescaled
+by the same factor so the composition is unchanged.
+
+To use them full bleed, give the parent no horizontal padding and no `max-width`
+below the viewport. Nothing inside the components adds a gutter.

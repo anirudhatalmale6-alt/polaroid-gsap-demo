@@ -5,15 +5,28 @@ body{
   color:#3a3a3a;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
 }
-.page{display:flex;flex-direction:column;align-items:center;gap:56px;padding:18px 14px 40px}
-.hero{width:100%;max-width:min(520px, calc((100svh - 210px) * 0.577));text-align:center}
-.hero + .hero{border-top:1px solid #e7e0d5;padding-top:34px}
+
+/* the assets are meant to be device width - as if you were holding the thing -
+   so nothing here puts a gutter beside them */
+.page{
+  display:flex;flex-direction:column;align-items:center;
+  gap:44px;
+  padding:18px 0 36px;
+}
+.hero{width:100%;max-width:520px;text-align:center}
+.hero + .hero{border-top:1px solid #e7e0d5;padding-top:30px}
+
+.copy{padding:0 16px}
 .eyebrow{margin:0 0 4px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#B08CA0}
 h1{margin:0 0 6px;font-size:clamp(24px,6vw,34px);letter-spacing:-.02em;color:#14315C}
-.lede{margin:0 auto 14px;max-width:38ch;font-size:14px;line-height:1.5;color:#7b7367}
+.lede{margin:0 auto 12px;max-width:38ch;font-size:14px;line-height:1.5;color:#7b7367}
+
+/* full bleed: no padding, no max-width of its own */
 .camera-slot{width:100%}
-.controls{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:8px}
+
+.controls{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:10px;padding:0 16px}
 .btn{
   appearance:none;border:0;cursor:pointer;
   background:#14315C;color:#fff;font-size:15px;font-weight:600;

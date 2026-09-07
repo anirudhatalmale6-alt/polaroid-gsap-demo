@@ -8,7 +8,7 @@
 
   position:relative;
   width:100%;
-  aspect-ratio: 600 / 1040;
+  aspect-ratio: 600 / 1122;
   margin:0 auto;
   isolation:isolate;
   container-type:inline-size;   /* type/caption scale with the component, not the viewport */
@@ -22,7 +22,7 @@
   position:absolute;
   top:0; left:0;
   width:100%;
-  height:auto;              /* 600x460 viewBox -> 44.2% of the stage height */
+  height:auto;              /* 600x497 viewBox, body edge to edge */
   transform-origin:50% 78%;
   will-change:transform;
   z-index:1;
@@ -50,8 +50,8 @@
 
 .pc-photo{
   position:absolute;
-  width:71.6%;
-  left:13.5%;
+  width:77.3%;              /* scales with the body, which is now full width */
+  left:10.6%;
   top:0;
   will-change:transform;
   backface-visibility:hidden;

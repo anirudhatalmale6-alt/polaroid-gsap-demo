@@ -1,15 +1,15 @@
 /* Receipt / invoice printer - component styles, scoped under .rp-stage */
 
 .rp-stage{
-  --rp-body-top: 50.60%;    /* printer body starts 420 down a 830 tall stage */
-  --rp-slot-y:   59.28%;    /* paper is clipped at 492, inside the slot mouth */
+  --rp-body-top: 50.54%;    /* printer body starts 470 down a 930 tall stage */
+  --rp-slot-y:   59.46%;    /* paper is clipped at 553, inside the slot mouth */
   --rp-ink: #14315C;
   --rp-pink: #E0658F;
   --rp-paper: #FCFAF5;
 
   position:relative;
   width:100%;
-  aspect-ratio: 600 / 830;
+  aspect-ratio: 600 / 930;
   margin:0 auto;
   isolation:isolate;
   container-type:inline-size;
@@ -23,7 +23,7 @@
   position:absolute;
   top:var(--rp-body-top); left:0;
   width:100%;
-  height:auto;              /* 600x330 viewBox */
+  height:auto;              /* 600x381 viewBox, machine edge to edge */
   will-change:transform;
   z-index:3;                /* over the paper, so the paper rises out of the slot */
 }
@@ -43,8 +43,8 @@
 .rp-paper{
   position:absolute;
   bottom:0;                 /* held at the rollers */
-  left:25.35%;
-  width:49.3%;
+  left:21.5%;
+  width:56.9%;              /* scales with the machine, which is now full width */
   aspect-ratio: 296 / 460;
   background:var(--rp-paper);
   transform-origin:50% 100%;

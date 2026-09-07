@@ -305,7 +305,7 @@ const ReceiptPrinter = forwardRef(function ReceiptPrinter(
       {printerSrc ? (
         <img className="rp-body" src={printerSrc} alt="" ref={bodyRef} draggable="false" />
       ) : (
-        <svg className="rp-body" ref={bodyRef} viewBox="0 0 600 330" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <svg className="rp-body" ref={bodyRef} viewBox="0 0 600 381" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
             <linearGradient id={id('shell')} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0" stopColor="#F6EFE4" /><stop offset="1" stopColor="#E4D8C7" />
@@ -324,6 +324,8 @@ const ReceiptPrinter = forwardRef(function ReceiptPrinter(
             </filter>
           </defs>
 
+          {/* drawn 520 units wide; scaled out so the machine reaches both edges */}
+          <g transform="translate(-46.154, 0) scale(1.153846)">
           <ellipse cx="300" cy="316" rx="222" ry="12" fill="#000" opacity="0.13" filter={url('soft')} />
 
           {/* blue foot, behind everything on the front */}
@@ -366,6 +368,7 @@ const ReceiptPrinter = forwardRef(function ReceiptPrinter(
             <rect x="168" y="150" width="170" height="8" rx="4" />
             <rect x="168" y="172" width="170" height="8" rx="4" />
             <rect x="168" y="194" width="124" height="8" rx="4" />
+          </g>
           </g>
         </svg>
       )}
