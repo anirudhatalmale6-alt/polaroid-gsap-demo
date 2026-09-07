@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Polaroid Camera Animation — GSAP</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="stage" id="stage">
+
+    <!-- ========== CAMERA (single inline SVG, sits behind the photos) ========== -->
+    <svg class="camera" id="camera" viewBox="0 0 600 460" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="shellG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#F6EFE4"/><stop offset="1" stop-color="#E6DACA"/>
+        </linearGradient>
+        <linearGradient id="shoulderG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#EFE6D8"/><stop offset="1" stop-color="#DCCFBC"/>
+        </linearGradient>
+        <linearGradient id="baseG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#8FB6DA"/><stop offset="1" stop-color="#6E97C2"/>
+        </linearGradient>
+        <radialGradient id="lensG" cx="0.42" cy="0.36" r="0.75">
+          <stop offset="0" stop-color="#4a3c56"/><stop offset="0.45" stop-color="#241d2c"/><stop offset="1" stop-color="#07060a"/>
+        </radialGradient>
+        <radialGradient id="flashG" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stop-color="#ffffff"/><stop offset="0.55" stop-color="#f2f4f8"/><stop offset="1" stop-color="#cfd6de"/>
+        </radialGradient>
+        <radialGradient id="burstG" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stop-color="#ffffff" stop-opacity="1"/>
+          <stop offset="0.35" stop-color="#ffffff" stop-opacity="0.85"/>
+          <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="slotG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#16202e"/><stop offset="1" stop-color="#2c3d52"/>
+        </linearGradient>
+        <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="6"/>
+        </filter>
+      </defs>
+
+      <!-- ground shadow under the camera -->
+      <ellipse cx="300" cy="432" rx="250" ry="16" fill="#000" opacity="0.13" filter="url(#soft)"/>
+
+      <!-- blue lower housing -->
+      <rect x="34" y="318" width="532" height="112" rx="26" fill="url(#baseG)"/>
+      <rect x="34" y="318" width="532" height="14" rx="7" fill="#A8C8E4" opacity="0.55"/>
+
+      <!-- film ejection slot -->
+      <rect x="104" y="337" width="392" height="19" rx="7" fill="url(#slotG)"/>
+      <rect x="104" y="337" width="392" height="6" rx="3" fill="#0d141d" opacity="0.75"/>
+      <!-- roller nubs either side of the slot -->
+      <rect x="76" y="336" width="26" height="21" rx="6" fill="#5C82AC"/>
+      <rect x="498" y="336" width="26" height="21" rx="6" fill="#5C82AC"/>
+
+      <!-- cream shoulder -->
+      <rect x="22" y="222" width="556" height="112" rx="26" fill="url(#shoulderG)"/>
+      <!-- rainbow stripe -->
+      <g>
+        <rect x="256" y="222" width="22" height="112" fill="#E4A0AB"/>
+        <rect x="278" y="222" width="22" height="112" fill="#EADFCB"/>
+        <rect x="300" y="222" width="22" height="112" fill="#C3CAD2"/>
+        <rect x="322" y="222" width="22" height="112" fill="#7FA9D0"/>
+      </g>
+
+      <!-- main cream shell -->
+      <rect x="44" y="14" width="512" height="224" rx="36" fill="url(#shellG)"/>
+      <rect x="60" y="24" width="480" height="16" rx="8" fill="#FFFBF4" opacity="0.7"/>
+
+      <!-- flash window -->
+      <g id="flashWindow">
+        <rect x="72" y="52" width="108" height="94" rx="14" fill="#5a5f66"/>
+        <rect x="78" y="58" width="96" height="82" rx="10" fill="url(#flashG)"/>
+        <g stroke="#c8ced6" stroke-width="1.6" opacity="0.9">
+          <path d="M78 79h96M78 100h96M78 121h96M102 58v82M126 58v82M150 58v82"/>
+        </g>
+        <circle id="flashBurst" cx="126" cy="99" r="120" fill="url(#burstG)" opacity="0"/>
+      </g>
+
+      <!-- shutter button -->
+      <g id="shutterBtn">
+        <circle cx="130" cy="196" r="42" fill="#C9B9A6"/>
+        <circle cx="130" cy="192" r="40" fill="#E9A9B2"/>
+        <circle cx="130" cy="186" r="34" fill="#F0B8C0"/>
+        <circle cx="130" cy="192" r="5" fill="#D4939D"/>
+      </g>
+
+      <!-- lens stack -->
+      <g id="lens">
+        <circle cx="300" cy="126" r="104" fill="#E8DECE"/>
+        <circle cx="300" cy="126" r="104" fill="none" stroke="#D2C4B0" stroke-width="2"/>
+        <circle cx="300" cy="126" r="88" fill="#E9A9B2"/>
+        <circle cx="300" cy="126" r="88" fill="none" stroke="#D9939E" stroke-width="2"/>
+        <circle cx="300" cy="126" r="72" fill="#141118"/>
+        <circle id="lensBarrel" cx="300" cy="126" r="62" fill="url(#lensG)"/>
+        <circle cx="300" cy="126" r="30" fill="#0b0910"/>
+        <circle cx="300" cy="126" r="16" fill="#1b1426"/>
+        <ellipse cx="278" cy="104" rx="17" ry="11" fill="#ffffff" opacity="0.5" transform="rotate(-32 278 104)"/>
+        <ellipse cx="330" cy="152" rx="9" ry="6" fill="#8f7fc0" opacity="0.45"/>
+        <!-- shutter blades close on capture -->
+        <circle id="shutterIris" cx="300" cy="126" r="0" fill="#05040a" opacity="0.92"/>
+      </g>
+
+      <!-- viewfinder -->
+      <g>
+        <rect x="424" y="54" width="120" height="96" rx="18" fill="#2a2b30"/>
+        <rect x="436" y="66" width="96" height="72" rx="12" fill="#0d0d11"/>
+        <circle cx="484" cy="102" r="26" fill="#15131c"/>
+        <circle cx="484" cy="102" r="12" fill="#241f33"/>
+        <ellipse cx="474" cy="92" rx="8" ry="5" fill="#fff" opacity="0.35" transform="rotate(-30 474 92)"/>
+      </g>
+
+      <!-- status LED -->
+      <g>
+        <rect x="468" y="172" width="74" height="28" rx="14" fill="#C8B49A"/>
+        <rect x="471" y="175" width="68" height="22" rx="11" fill="#2b2118"/>
+        <circle id="led" cx="505" cy="186" r="9" fill="#F0A227"/>
+        <circle id="ledGlow" cx="505" cy="186" r="20" fill="#F0A227" opacity="0.35" filter="url(#soft)"/>
+      </g>
+    </svg>
+
+    <!-- ========== PHOTOS (clipped at the slot line so they emerge from the camera) ========== -->
+    <div class="photo-stage" id="photoStage">
+
+      <!-- ejected first, travels down to its resting place -->
+      <div class="photo photo-a" id="photoA">
+        <div class="photo-inner">
+          <div class="photo-title">BEFORE</div>
+          <div class="photo-img img-before"><span class="dev-veil"></span></div>
+          <div class="photo-caption">the starting point &#9825;</div>
+        </div>
+      </div>
+
+      <!-- ejected second, stays parked in the slot -->
+      <div class="photo photo-b" id="photoB">
+        <div class="photo-inner">
+          <div class="photo-title">AFTER</div>
+          <div class="photo-img img-after"><span class="dev-veil"></span></div>
+          <div class="photo-caption">the final look &#9825;</div>
+        </div>
+      </div>
+
+      <div class="slot-lip"></div>
+    </div>
+
+    <div class="flash-overlay" id="flashOverlay"></div>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="playBtn">Take the photo</button>
+    <label class="snd"><input type="checkbox" id="sndToggle" checked> sound</label>
+  </div>
+
+</div>
+
+<script src="gsap.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
