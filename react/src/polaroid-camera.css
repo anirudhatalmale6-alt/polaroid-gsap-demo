@@ -2,13 +2,13 @@
    Everything is scoped under .pc-stage so it cannot leak into the page. */
 
 .pc-stage{
-  --pc-slot-y: 33.37%;      /* y of the film slot (347 of the 1040 tall stage) */
+  --pc-slot-y: 25.82%;      /* y of the film slot (374.4 of the 1450 tall stage) */
   --pc-ink: #14315C;
   --pc-pink: #E0658F;
 
   position:relative;
   width:100%;
-  aspect-ratio: 600 / 1122;
+  aspect-ratio: 600 / 1450;
   margin:0 auto;
   isolation:isolate;
   container-type:inline-size;   /* type/caption scale with the component, not the viewport */
@@ -74,7 +74,7 @@
   font-weight:800;
   letter-spacing:.11em;
   color:var(--pc-ink);
-  font-size:clamp(10px,3.4cqw,15px);
+  font-size:3.4cqw;
   margin-bottom:3%;
 }
 .pc-photo-title::before,.pc-photo-title::after{
@@ -88,7 +88,7 @@
 .pc-photo-img{
   position:relative;
   width:100%;
-  aspect-ratio: 1.94;
+  aspect-ratio: 1;            /* square: matches Instagram uploads, and a real Polaroid image area */
   border-radius:2px;
   overflow:hidden;
   background:#CFC3B4;
@@ -126,7 +126,7 @@
   color:var(--pc-pink);
   font-family:"Snell Roundhand","Segoe Script","Brush Script MT",cursive;
   font-style:italic;
-  font-size:clamp(12px,4cqw,19px);
+  font-size:4cqw;
   margin-top:3.5%;
 }
 

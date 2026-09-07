@@ -8,8 +8,9 @@ import './polaroid-camera.css'
  * ------------------------------------------------------------------ */
 const OFF = -122      // fully swallowed by the camera
 const A_LIP = 6       // first print just clear of the rollers
-const A_REST = 101.9  // first print settled below the camera
-const B_REST = -5     // second print parked with its top edge in the slot
+const A_REST = 101.8  // first print settled below the camera
+const B_REST = -2.5   // second print parked with its top edge in the slot
+                      // (a fixed tuck - as a % of the taller square card it ate the title)
 
 const DEFAULT_PHOTOS = [
   { title: 'BEFORE', caption: 'the starting point ♡', tone: 'before' },

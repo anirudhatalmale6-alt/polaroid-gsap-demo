@@ -17,13 +17,14 @@ body{
   align-items:center;
   justify-content:center;
   position:relative;
+  padding-bottom:36px;      /* room for the replay hint, so it never sits on the art */
 }
 .fp-inner{
   width:100%;
   margin:0 auto;
 }
-.fp-cam   .fp-inner{ max-width: calc(100svh * 0.53476); }  /* 600 / 1122 */
-.fp-print .fp-inner{ max-width: calc(100svh * 0.64516); }  /* 600 / 930  */
+.fp-cam   .fp-inner{ max-width: calc((100svh - 36px) * 0.41379); }  /* 600 / 1450 */
+.fp-print .fp-inner{ max-width: calc((100svh - 36px) * 0.64516); }  /* 600 / 930  */
 
 .fp-hint{
   position:absolute;

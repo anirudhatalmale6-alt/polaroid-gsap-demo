@@ -205,3 +205,38 @@ The build is split per page, so the camera page doesn't ship the printer:
 | shared React + GSAP | 213 kB | 74 kB |
 | PolaroidCamera | 12.3 kB | 3.9 kB |
 | ReceiptPrinter | 8.6 kB | 3.1 kB |
+
+---
+
+## Square photo window
+
+The prints' photo area is square. The uploads are Instagram-style (square or tall)
+and the window in the original mockup was wide (~1.94:1), so a centre crop was
+taking the top and bottom off — which on a nail photo is where the nails are. A
+real Polaroid image area is roughly square anyway.
+
+Two things had to move with it:
+
+- **The tuck depth is now a fixed distance, not a percentage.** `B_REST` was -5%,
+  which on the taller square card worked out at ~26 units and swallowed half the
+  "AFTER" title. It is -2.5% (~13 units) so the title clears the slot. Anything
+  expressed as a percentage of the card has to be rechecked when the card's
+  proportions change.
+- **The stage got taller** — 600×1450, up from 600×1122 — because a square window
+  makes each card taller and there are two of them stacked.
+
+### The height/width trade-off this creates
+
+At 600×1450 the component is 2.42× taller than it is wide, and a phone screen is
+about 2.16×. So all three of these cannot hold at once: full device width, the
+whole animation on screen, and the prints at the mockup's size. Measured on a
+390×844 phone:
+
+| choice | result |
+| --- | --- |
+| whole scene on screen (current) | 334px wide — 86% of the screen, no scroll |
+| true full width | 390px wide, 942px tall — about 98px of scroll |
+| prints at ~66% of the body instead of 77% | full width, no scroll, smaller prints |
+
+The current build takes the first. The height cap in `fullpage.css` does it
+automatically, so on a taller phone it gets closer to full width on its own.
