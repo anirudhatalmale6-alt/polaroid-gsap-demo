@@ -1,7 +1,9 @@
 # Polaroid camera animation — GSAP
 
 - Vanilla: https://anirudhatalmale6-alt.github.io/polaroid-gsap-demo/
-- React: https://anirudhatalmale6-alt.github.io/polaroid-gsap-demo/react-live/
+- React (both, one page): https://anirudhatalmale6-alt.github.io/polaroid-gsap-demo/react-live/
+- Camera, full page: https://anirudhatalmale6-alt.github.io/polaroid-gsap-demo/react-live/camera.html
+- Printer, full page: https://anirudhatalmale6-alt.github.io/polaroid-gsap-demo/react-live/printer.html
 
 A mobile/tablet-first Polaroid capture sequence built on GSAP core only — no plugins,
 no framework, no build step. Also packaged as a single React component in `react/`.
@@ -171,3 +173,35 @@ by the same factor so the composition is unchanged.
 
 To use them full bleed, give the parent no horizontal padding and no `max-width`
 below the viewport. Nothing inside the components adds a gutter.
+
+
+---
+
+## One animation per page
+
+Each asset gets its own page and fills it. `camera.html` / `printer.html` are that
+setup, and `src/fullpage.css` is the whole of it.
+
+The sizing rule is one line per component:
+
+```css
+.fp-cam   .fp-inner{ max-width: calc(100svh * 0.53476); }  /* 600 / 1122 */
+.fp-print .fp-inner{ max-width: calc(100svh * 0.64516); }  /* 600 / 930  */
+```
+
+Width first, height as the cap. On a phone the height cap is bigger than the
+screen is wide, so the component takes the full width and is genuinely edge to
+edge. On a desktop full width would be several screens tall, so the cap takes over
+and it centres instead. Measured: 390×844 gives a 390-wide camera in a 844 page
+with no scroll; 1440×900 gives 481×900, centred, also no scroll. Either way the
+whole sequence is visible without scrolling to catch the ending.
+
+`100svh` rather than `100vh` so the mobile address bar collapsing doesn't crop it.
+
+The build is split per page, so the camera page doesn't ship the printer:
+
+| chunk | size | gzip |
+| --- | --- | --- |
+| shared React + GSAP | 213 kB | 74 kB |
+| PolaroidCamera | 12.3 kB | 3.9 kB |
+| ReceiptPrinter | 8.6 kB | 3.1 kB |

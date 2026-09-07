@@ -1,0 +1,37 @@
+*{box-sizing:border-box}
+html,body,#root{margin:0;padding:0;height:100%}
+body{
+  background:#F7F4EF;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* One animation, one page, filling the space.
+   On a phone that means genuinely edge to edge. On a desktop, full width would
+   make it taller than the screen, so it caps on HEIGHT instead and centres -
+   the whole thing stays visible either way, no scrolling to see the ending. */
+.fp{
+  min-height:100svh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+}
+.fp-inner{
+  width:100%;
+  margin:0 auto;
+}
+.fp-cam   .fp-inner{ max-width: calc(100svh * 0.53476); }  /* 600 / 1122 */
+.fp-print .fp-inner{ max-width: calc(100svh * 0.64516); }  /* 600 / 930  */
+
+.fp-hint{
+  position:absolute;
+  left:0; right:0; bottom:14px;
+  text-align:center;
+  font-size:12px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#b3aa9d;
+  pointer-events:none;
+}
