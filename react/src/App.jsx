@@ -37,8 +37,8 @@ export default function App() {
         <p className="eyebrow">React + GSAP</p>
         <h1>Invoice printer</h1>
         <p className="lede">
-          Same machinery, different body. The paper feeds in discrete line steps
-          rather than gliding, so it reads as a printer and not a slide.
+          Ejects upward, in discrete line steps rather than a smooth glide.
+          The paper travels; the heading leads because it is the top of the job.
         </p>
 
         <div className="camera-slot">

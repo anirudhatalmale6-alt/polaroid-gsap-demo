@@ -3,17 +3,26 @@ import gsap from 'gsap'
 import './receipt-printer.css'
 
 /* ------------------------------------------------------------------ *
- * The feed is a REVEAL, not a slide.
+ * The paper is EJECTED UPWARD, and that is the whole trick.
  *
- * A printer prints the top of the document first, so the heading has to be
- * the first thing through the slot and everything after it appears below.
- * Sliding a finished strip down out of the slot gives you the opposite -
- * the footer leads and the heading arrives last. So the paper stays pinned
- * at the slot and its leading edge advances down the page instead.
+ * Feed a receipt down out of a front slot and you get a choice of two
+ * wrong things: either the strip slides down as a finished sheet, in which
+ * case the bottom of the invoice leads and the heading arrives last, or you
+ * pin it and grow it downward, which reads as the paper being dragged down
+ * rather than pushed out.
+ *
+ * A real thermal printer ejects upward out of the top. Do that and the
+ * problem disappears: the paper genuinely travels, the heading leads because
+ * it is the top of the document, and when it finishes it reads top to bottom
+ * the right way round. It is also a plain transform, so it stays on the
+ * compositor and survives being scrubbed.
  * ------------------------------------------------------------------ */
+const PAPER_IN = 100     // still inside the machine, below the slot line
+const PAPER_OUT = 0      // fully ejected, bottom edge still in the rollers
+
 const FEED_SECONDS = 3.6 // deliberately slow - a receipt printer is not a photo eject
 const FEED_STEPS = 36    // discrete line feeds rather than a smooth glide
-const SAG = 1.1          // degrees the paper droops once it is hanging free
+const CURL = -1.6        // degrees the paper leans as it rises clear of the slot
 
 const DEFAULT_RECEIPT = {
   heading: 'INVOICE',
@@ -95,7 +104,6 @@ function createAudio() {
       // paper dragging over the tear bar
       const s = c.createBufferSource()
       s.buffer = noise(c, dur)
-      s.loop = false
       const hp = c.createBiquadFilter()
       hp.type = 'highpass'
       hp.frequency.value = 4200
@@ -175,11 +183,8 @@ const ReceiptPrinter = forwardRef(function ReceiptPrinter(
 
       const reset = () => {
         gsap.set(body, { x: 0, y: 0, rotation: 0 })
-        // --rp-hide is tweened directly rather than driven from an onUpdate:
-        // GSAP suppresses callbacks when a timeline is seeked, so a
-        // callback-driven clip would sit frozen under any scrub or seek.
-        gsap.set(paper, { rotation: 0, '--rp-hide': '100%' })
-        gsap.set(buttonRef.current, { y: 0, scale: 1, transformOrigin: '111px 250px' })
+        gsap.set(paper, { yPercent: PAPER_IN, rotation: 0 })
+        gsap.set(buttonRef.current, { y: 0, scale: 1, transformOrigin: '111px 214px' })
         gsap.set(ledRef.current, { opacity: 0.35 })
         gsap.set(ledGlowRef.current, { opacity: 0.12 })
       }
@@ -197,17 +202,16 @@ const ReceiptPrinter = forwardRef(function ReceiptPrinter(
        .to(ledRef.current, { opacity: 1, duration: 0.12 }, 0.05)
        .to(ledGlowRef.current, { opacity: 0.5, duration: 0.12 }, 0.05)
 
-      /* 2. the feed itself - stepped, not glided, so it reads as line feeds */
+      /* 2. the feed - the paper actually travels, in discrete line steps */
       t.add('feed', 0.34)
        .call(playFeed, null, 'feed')
-       // leading edge advances in discrete line feeds
        .to(paper, {
-         '--rp-hide': '0%',
+         yPercent: PAPER_OUT,
          duration: FEED_SECONDS,
          ease: `steps(${FEED_STEPS})`,
        }, 'feed')
-       // paper droops under its own weight as more of it hangs free
-       .to(paper, { rotation: SAG, duration: FEED_SECONDS, ease: 'power2.in' }, 'feed')
+       // it leans over as more of it stands clear of the slot
+       .to(paper, { rotation: CURL, duration: FEED_SECONDS, ease: 'power2.in' }, 'feed')
        // body buzzes for as long as the motor runs
        .to(body, {
          x: 0.9, y: -0.6,
@@ -221,7 +225,7 @@ const ReceiptPrinter = forwardRef(function ReceiptPrinter(
       t.add('done', `feed+=${FEED_SECONDS}`)
        .set(body, { x: 0, y: 0 }, 'done')
        .call(playBeep, null, 'done')
-       .to(paper, { rotation: SAG * 0.55, duration: 0.5, ease: 'power2.out' }, 'done')
+       .to(paper, { rotation: CURL * 0.55, duration: 0.55, ease: 'power2.out' }, 'done')
        .to(ledRef.current, { opacity: 0.35, duration: 0.4 }, 'done+=0.3')
        .to(ledGlowRef.current, { opacity: 0.12, duration: 0.4 }, 'done+=0.3')
 
@@ -264,67 +268,8 @@ const ReceiptPrinter = forwardRef(function ReceiptPrinter(
 
   return (
     <div className={`rp-stage ${className}`} ref={root} onClick={play}>
-      {printerSrc ? (
-        <img className="rp-body" src={printerSrc} alt="" ref={bodyRef} draggable="false" />
-      ) : (
-        <svg className="rp-body" ref={bodyRef} viewBox="0 0 600 330" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <defs>
-            <linearGradient id={id('shell')} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor="#F6EFE4" /><stop offset="1" stopColor="#E4D8C7" />
-            </linearGradient>
-            <linearGradient id={id('base')} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor="#8FB6DA" /><stop offset="1" stopColor="#6E97C2" />
-            </linearGradient>
-            <linearGradient id={id('slot')} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor="#151f2c" /><stop offset="1" stopColor="#33465d" />
-            </linearGradient>
-            <filter id={id('soft')} x="-30%" y="-30%" width="160%" height="160%">
-              <feGaussianBlur stdDeviation="6" />
-            </filter>
-          </defs>
 
-          {/* lid, tipped back so the paper roll sits under it */}
-          <rect x="66" y="18" width="468" height="86" rx="30" fill="#E9DFCE" />
-          <rect x="86" y="28" width="428" height="14" rx="7" fill="#FFFBF4" opacity="0.75" />
-
-          {/* foot, behind the body so nothing on the front gets covered */}
-          <rect x="76" y="248" width="448" height="62" rx="24" fill={url('base')} />
-          <rect x="76" y="248" width="448" height="12" rx="6" fill="#A8C8E4" opacity="0.5" />
-
-          {/* main body */}
-          <rect x="52" y="86" width="496" height="176" rx="30" fill={url('shell')} />
-
-          {/* tear bar and paper slot */}
-          <rect x="128" y="228" width="344" height="12" rx="6" fill="#CBBCA6" />
-          <rect x="140" y="236" width="320" height="20" rx="6" fill={url('slot')} />
-          <rect x="140" y="236" width="320" height="6" rx="3" fill="#0c1219" opacity="0.8" />
-
-          {/* feed button */}
-          <g ref={buttonRef}>
-            <circle cx="111" cy="254" r="27" fill="#C9B9A6" />
-            <circle cx="111" cy="250" r="25" fill="#E9A9B2" />
-            <circle cx="111" cy="245" r="21" fill="#F0B8C0" />
-          </g>
-
-          {/* status lamp */}
-          <g>
-            <rect x="452" y="132" width="62" height="24" rx="12" fill="#C8B49A" />
-            <rect x="455" y="135" width="56" height="18" rx="9" fill="#2b2118" />
-            <circle ref={ledGlowRef} cx="483" cy="144" r="17" fill="#5FBF7A" opacity="0.12" filter={url('soft')} />
-            <circle ref={ledRef} cx="483" cy="144" r="7" fill="#5FBF7A" opacity="0.35" />
-          </g>
-
-          {/* vent grille */}
-          <g fill="#D8C9B4">
-            <rect x="150" y="140" width="150" height="7" rx="3.5" />
-            <rect x="150" y="158" width="150" height="7" rx="3.5" />
-            <rect x="150" y="176" width="110" height="7" rx="3.5" />
-          </g>
-
-          <ellipse cx="300" cy="316" rx="220" ry="12" fill="#000" opacity="0.13" filter={url('soft')} />
-        </svg>
-      )}
-
+      {/* paper sits behind the machine and is clipped at the slot line */}
       <div className="rp-paper-stage">
         <div className="rp-paper" ref={paperRef}>
           {paperSrc ? (
@@ -355,8 +300,75 @@ const ReceiptPrinter = forwardRef(function ReceiptPrinter(
             </div>
           )}
         </div>
-        <div className="rp-slot-lip" />
       </div>
+
+      {printerSrc ? (
+        <img className="rp-body" src={printerSrc} alt="" ref={bodyRef} draggable="false" />
+      ) : (
+        <svg className="rp-body" ref={bodyRef} viewBox="0 0 600 330" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id={id('shell')} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="#F6EFE4" /><stop offset="1" stopColor="#E4D8C7" />
+            </linearGradient>
+            <linearGradient id={id('deck')} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="#EFE6D8" /><stop offset="1" stopColor="#DDD0BD" />
+            </linearGradient>
+            <linearGradient id={id('base')} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="#8FB6DA" /><stop offset="1" stopColor="#6E97C2" />
+            </linearGradient>
+            <linearGradient id={id('slot')} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="#33465d" /><stop offset="1" stopColor="#151f2c" />
+            </linearGradient>
+            <filter id={id('soft')} x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="6" />
+            </filter>
+          </defs>
+
+          <ellipse cx="300" cy="316" rx="222" ry="12" fill="#000" opacity="0.13" filter={url('soft')} />
+
+          {/* blue foot, behind everything on the front */}
+          <rect x="76" y="238" width="448" height="72" rx="26" fill={url('base')} />
+          <rect x="76" y="238" width="448" height="12" rx="6" fill="#A8C8E4" opacity="0.5" />
+
+          {/* main body */}
+          <rect x="52" y="96" width="496" height="166" rx="28" fill={url('shell')} />
+
+          {/* top deck the paper comes up through */}
+          <rect x="40" y="52" width="520" height="60" rx="24" fill={url('deck')} />
+          <rect x="58" y="60" width="484" height="12" rx="6" fill="#FFFBF4" opacity="0.6" />
+
+          {/* the slot itself, drawn over the paper so the paper rises out of it */}
+          <rect x="150" y="56" width="300" height="20" rx="7" fill={url('slot')} />
+          <rect x="150" y="70" width="300" height="6" rx="3" fill="#0c1219" opacity="0.55" />
+          {/* tear bar along the front lip of the slot */}
+          <rect x="146" y="76" width="308" height="9" rx="4.5" fill="#CBBCA6" />
+          {/* rollers either side */}
+          <rect x="122" y="56" width="26" height="22" rx="7" fill="#C3B39C" />
+          <rect x="452" y="56" width="26" height="22" rx="7" fill="#C3B39C" />
+
+          {/* feed button */}
+          <g ref={buttonRef}>
+            <circle cx="111" cy="218" r="27" fill="#C9B9A6" />
+            <circle cx="111" cy="214" r="25" fill="#E9A9B2" />
+            <circle cx="111" cy="209" r="21" fill="#F0B8C0" />
+          </g>
+
+          {/* status lamp */}
+          <g>
+            <rect x="452" y="196" width="62" height="24" rx="12" fill="#C8B49A" />
+            <rect x="455" y="199" width="56" height="18" rx="9" fill="#2b2118" />
+            <circle ref={ledGlowRef} cx="483" cy="208" r="17" fill="#5FBF7A" opacity="0.12" filter={url('soft')} />
+            <circle ref={ledRef} cx="483" cy="208" r="7" fill="#5FBF7A" opacity="0.35" />
+          </g>
+
+          {/* vent grille */}
+          <g fill="#D8C9B4">
+            <rect x="168" y="150" width="170" height="8" rx="4" />
+            <rect x="168" y="172" width="170" height="8" rx="4" />
+            <rect x="168" y="194" width="124" height="8" rx="4" />
+          </g>
+        </svg>
+      )}
     </div>
   )
 })

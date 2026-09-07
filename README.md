@@ -132,23 +132,23 @@ with `play()` / `reset()` / `timeline`.
 Pass `paperSrc` / `printerSrc` instead to use exported artwork rather than the
 built-in markup and SVG.
 
-**Two things that decide whether it reads as a printer**
+**The paper ejects upward, and that is the whole trick**
 
-- *The feed is a reveal, not a slide.* A printer prints the top of the document
-  first, so the heading has to be the first thing through the slot. Sliding a
-  finished strip down out of the slot gives you the exact opposite — the footer
-  leads and the heading arrives last. So the paper stays pinned at the slot and its
-  leading edge advances down the page. As a bonus the text then appears line by
-  line for free, with no per-line animation.
-- *The feed is stepped, not eased.* `steps(36)` over 3.6s gives discrete line feeds.
-  A smooth glide reads as a slide; the steps are what make it mechanical. The motor
-  sound is chopped at the same rate so the buzz and the paper advance line up.
+Feeding a receipt *down* out of a front slot gives you a choice of two wrong
+things. Slide the strip down as a finished sheet and the bottom of the invoice
+leads, so the heading arrives last. Pin it and grow it downward instead and it
+reads as the paper being dragged down rather than pushed out.
 
-The leading edge stays straight while feeding, because paper still on the roll has a
-straight edge — a torn zigzag only makes sense after a tear-off, which isn't in
-there yet.
+A real thermal printer ejects upward out of the top, and doing that makes the
+problem disappear: the paper genuinely travels, the heading leads because it is
+the top of the job, and the finished receipt still reads top to bottom the right
+way round. It is also a plain `yPercent`, so it stays on the compositor and
+survives being scrubbed.
 
-**Note on `--rp-hide`:** the reveal is a CSS custom property tweened directly by
-GSAP, not a value written from an `onUpdate`. GSAP suppresses callbacks when a
-timeline is seeked, so a callback-driven clip sits frozen under any scrub — worth
-knowing if this ever gets pinned to a ScrollTrigger.
+**The feed is stepped, not eased.** `steps(36)` over 3.6s gives discrete line
+feeds. A smooth glide reads as a sliding image; the steps are what make it
+mechanical. The motor sound is chopped at the same rate so the buzz and the paper
+advance line up.
+
+The leading edge stays straight, because paper still on the roll has a straight
+edge — a torn zigzag only makes sense after a tear-off, which isn't in there yet.
