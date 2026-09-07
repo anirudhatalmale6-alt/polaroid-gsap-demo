@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import PolaroidCamera from './PolaroidCamera.jsx'
+import ReceiptPrinter from './ReceiptPrinter.jsx'
 
 export default function App() {
   const cam = useRef(null)
+  const printer = useRef(null)
   const [sound, setSound] = useState(true)
 
   // handy handle for QA / frame grabs
-  useEffect(() => { window.__cam = cam.current }, [])
+  useEffect(() => { window.__cam = cam.current; window.__printer = printer.current }, [])
 
   return (
     <main className="page">
@@ -19,12 +21,7 @@ export default function App() {
         </p>
 
         <div className="camera-slot">
-          <PolaroidCamera
-            ref={cam}
-            sound={sound}
-            playOnView
-            onComplete={() => console.log('sequence finished')}
-          />
+          <PolaroidCamera ref={cam} sound={sound} playOnView />
         </div>
 
         <div className="controls">
@@ -33,6 +30,23 @@ export default function App() {
             <input type="checkbox" checked={sound} onChange={(e) => setSound(e.target.checked)} />
             sound
           </label>
+        </div>
+      </section>
+
+      <section className="hero">
+        <p className="eyebrow">React + GSAP</p>
+        <h1>Invoice printer</h1>
+        <p className="lede">
+          Same machinery, different body. The paper feeds in discrete line steps
+          rather than gliding, so it reads as a printer and not a slide.
+        </p>
+
+        <div className="camera-slot">
+          <ReceiptPrinter ref={printer} sound={sound} playOnView />
+        </div>
+
+        <div className="controls">
+          <button className="btn" onClick={() => printer.current?.play()}>Print the invoice</button>
         </div>
       </section>
     </main>
