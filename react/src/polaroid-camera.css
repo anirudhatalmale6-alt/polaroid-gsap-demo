@@ -1,0 +1,140 @@
+/* Polaroid camera animation - component styles.
+   Everything is scoped under .pc-stage so it cannot leak into the page. */
+
+.pc-stage{
+  --pc-slot-y: 33.37%;      /* y of the film slot (347 of the 1040 tall stage) */
+  --pc-ink: #14315C;
+  --pc-pink: #E0658F;
+
+  position:relative;
+  width:100%;
+  aspect-ratio: 600 / 1040;
+  margin:0 auto;
+  isolation:isolate;
+  container-type:inline-size;   /* type/caption scale with the component, not the viewport */
+  overflow:hidden;          /* keeps the flash wash inside the frame */
+  touch-action:manipulation;
+  cursor:pointer;
+}
+.pc-stage *{box-sizing:border-box}
+
+.pc-camera{
+  position:absolute;
+  top:0; left:0;
+  width:100%;
+  height:auto;              /* 600x460 viewBox -> 44.2% of the stage height */
+  transform-origin:50% 78%;
+  will-change:transform;
+  z-index:1;
+}
+
+/* the prints sit in a box clipped at the slot line, so anything above
+   that line is genuinely still inside the camera */
+.pc-photo-stage{
+  position:absolute;
+  left:0; right:0;
+  top:var(--pc-slot-y);
+  bottom:0;
+  overflow:hidden;
+  z-index:2;
+  pointer-events:none;
+}
+
+.pc-slot-lip{
+  position:absolute;
+  left:17.3%; right:17.3%;
+  top:0; height:7px;
+  background:linear-gradient(to bottom,rgba(8,14,22,.7),rgba(8,14,22,0));
+  z-index:9;
+}
+
+.pc-photo{
+  position:absolute;
+  width:71.6%;
+  left:13.5%;
+  top:0;
+  will-change:transform;
+  backface-visibility:hidden;
+}
+.pc-photo-b{z-index:4}
+.pc-photo-a{z-index:3}
+
+.pc-photo-inner{
+  background:#FBF8F2;
+  border-radius:3px;
+  padding:4% 7% 4%;
+  box-shadow:
+    0 1px 2px rgba(20,25,35,.16),
+    0 10px 22px rgba(20,25,35,.20),
+    0 22px 40px rgba(20,25,35,.12);
+}
+
+.pc-photo-title{
+  text-align:center;
+  font-weight:800;
+  letter-spacing:.11em;
+  color:var(--pc-ink);
+  font-size:clamp(10px,3.4cqw,15px);
+  margin-bottom:3%;
+}
+.pc-photo-title::before,.pc-photo-title::after{
+  content:"\002F\002F";
+  color:var(--pc-pink);
+  margin:0 .5em;
+  font-size:.8em;
+  vertical-align:2px;
+}
+
+.pc-photo-img{
+  position:relative;
+  width:100%;
+  aspect-ratio: 1.94;
+  border-radius:2px;
+  overflow:hidden;
+  background:#CFC3B4;
+}
+.pc-photo-img img{
+  display:block;
+  width:100%; height:100%;
+  object-fit:cover;
+}
+
+/* placeholder faces, only used until the real exports are dropped in */
+.pc-img-before{background:linear-gradient(150deg,#DCCFC0 0%,#C9B7A4 45%,#D6C7B6 100%)}
+.pc-img-after{background:linear-gradient(150deg,#D8C6AE 0%,#8A5A32 40%,#4A2A18 75%,#C79A62 100%)}
+.pc-img-before::after,.pc-img-after::after{
+  content:"";
+  position:absolute;
+  left:50%; bottom:-14%;
+  width:52%; aspect-ratio:1/1.25;
+  transform:translateX(-50%);
+  border-radius:46% 46% 38% 38% / 40% 40% 60% 60%;
+  background:radial-gradient(120% 90% at 35% 20%,rgba(255,255,255,.30),rgba(0,0,0,.16));
+  mix-blend-mode:soft-light;
+}
+
+/* emulsion veil - fades off as the print develops */
+.pc-dev-veil{
+  position:absolute;
+  inset:0;
+  background:#efe9df;
+  z-index:2;
+}
+
+.pc-photo-caption{
+  text-align:center;
+  color:var(--pc-pink);
+  font-family:"Snell Roundhand","Segoe Script","Brush Script MT",cursive;
+  font-style:italic;
+  font-size:clamp(12px,4cqw,19px);
+  margin-top:3.5%;
+}
+
+.pc-flash-overlay{
+  position:absolute;
+  inset:-40%;
+  background:radial-gradient(circle at 21% 21%,rgba(255,255,255,.98),rgba(255,255,255,.55) 40%,rgba(255,255,255,0) 72%);
+  opacity:0;
+  pointer-events:none;
+  z-index:6;
+}

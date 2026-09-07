@@ -1,9 +1,10 @@
 # Polaroid camera animation — GSAP
 
-Live: https://anirudhatalmale6-alt.github.io/polaroid-gsap-demo/
+- Vanilla: https://anirudhatalmale6-alt.github.io/polaroid-gsap-demo/
+- React: https://anirudhatalmale6-alt.github.io/polaroid-gsap-demo/react-live/
 
 A mobile/tablet-first Polaroid capture sequence built on GSAP core only — no plugins,
-no framework, no build step.
+no framework, no build step. Also packaged as a single React component in `react/`.
 
 **The sequence**
 
@@ -44,3 +45,64 @@ no framework, no build step.
   audio asset.
 - WebM: if the flash or the print texture is supplied as video, it drops into the
   same timeline via a `.call()` on the `snap` label — same sync guarantee.
+
+---
+
+## React
+
+`react/src/PolaroidCamera.jsx` + `react/src/polaroid-camera.css` — that pair is the
+whole component. Works in Vite, CRA and Next.js (app router). Only dependency is
+`gsap`.
+
+```jsx
+import { useRef } from 'react'
+import PolaroidCamera from './PolaroidCamera'
+
+export default function Hero() {
+  const cam = useRef(null)
+
+  return (
+    <>
+      <PolaroidCamera
+        ref={cam}
+        playOnView                 // fires once when it scrolls into view
+        sound
+        shutterSrc="/shutter.mp3"  // omit and it synthesises the click
+        photos={[
+          { title: 'BEFORE', caption: 'the starting point ♡', src: '/before.png' },
+          { title: 'AFTER',  caption: 'the final look ♡',     src: '/after.png'  },
+        ]}
+        onComplete={() => {}}
+      />
+      <button onClick={() => cam.current.play()}>Replay</button>
+    </>
+  )
+}
+```
+
+**Props**
+
+| prop | default | what it does |
+| --- | --- | --- |
+| `photos` | placeholders | `[first, second]` — the first ejects and settles below, the second parks in the slot. Each `{ title, caption, src, alt }`. |
+| `playOnView` | `true` | fires once, when 40% of the component scrolls into view |
+| `autoPlay` | `false` | fires on mount instead |
+| `sound` | `true` | live toggle — reads through to a running timeline without rebuilding it |
+| `shutterSrc` | `null` | real shutter recording; without it the click is synthesised |
+| `cameraSrc` | `null` | swap the drawn SVG body for an exported image |
+| `onComplete` | — | called when the sequence lands |
+
+**Ref handle:** `play()`, `reset()`, `timeline` (the raw GSAP timeline, if you want
+to scrub it or pin it to a scroll position).
+
+**Notes for dropping it into a page**
+
+- The component is one square-ish block that fills its parent's width and keeps its
+  own aspect ratio. Give it a container width — it needs nothing else.
+- Type inside it is sized in `cqw`, so the titles and captions scale with the
+  component rather than the viewport. A camera in a narrow column looks right
+  without overrides.
+- The GSAP timeline is built inside a `gsap.context()` and reverted on unmount, so
+  StrictMode's double-mount in dev doesn't leave a second timeline running.
+- SVG gradient ids are namespaced with `useId()`, so two cameras on one page don't
+  fight over them.
