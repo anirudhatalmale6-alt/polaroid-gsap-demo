@@ -92,8 +92,14 @@ otherwise it renders in the closest web-safe match.
 | `button` | the feed / print button |
 | `lamp` | status light |
 
-The **paper slot** is at **y = 249** from the top of the canvas. The invoice
-rises up out of it.
+**The slot moved to the bottom (9 Sep).** The invoice now feeds *downward* as
+the reader scrolls, so the slot belongs on the front lip near the base — at
+about **y = 983** of the 1143, not y = 249. A slot on the top deck with paper
+coming out downward reads as the paper going back *into* the machine.
+
+As with the camera, if the slot in your artwork sits somewhere else, leave it
+where it looks right and tell me — I move my number to your art, not the other
+way round.
 
 ### Paper — 1023 × 1593, optional
 
