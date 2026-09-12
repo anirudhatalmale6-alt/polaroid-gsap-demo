@@ -92,16 +92,26 @@ otherwise it renders in the closest web-safe match.
 | `button` | the feed / print button |
 | `lamp` | status light |
 
+**Export it exactly the way the camera was exported the second time** — that
+set was right. Every layer on one 1800 × 1143 canvas, each part left where it
+belongs, nothing trimmed and nothing resized. In Photoshop: File > Export >
+Layers To Files with *Trim Layers* unchecked.
+
+Real transparent holes in the body where the button and lamp sit are fine —
+that is what the camera did and it is the better way. I put a plate behind the
+stack so nothing shows through when a part moves.
+
 **The slot moved to the bottom (9 Sep).** The invoice now feeds *downward* as
 the reader scrolls, so the slot belongs on the front lip near the base — at
-about **y = 983** of the 1143, not y = 249. A slot on the top deck with paper
+about **y = 983** of the 1143, not y = 249 — that is the slot mouth; the paper
+clears the front lip at **y = 1070**. A slot on the top deck with paper
 coming out downward reads as the paper going back *into* the machine.
 
 As with the camera, if the slot in your artwork sits somewhere else, leave it
 where it looks right and tell me — I move my number to your art, not the other
 way round.
 
-### Paper — 1023 × 1593, optional
+### Paper — 1024 × 1591, optional
 
 Only needed if you want a printed letterhead or a paper texture behind the text.
 Leave it out and I draw the stock.
