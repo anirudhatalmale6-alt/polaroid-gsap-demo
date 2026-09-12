@@ -44,10 +44,9 @@ is usually smaller. If it is vector, send SVG and ignore the pixel sizes.
 
 Only those five move. Anything else can be flattened into `body`.
 
-The **film slot** sits at **y = 1123** from the top of the canvas. The prints
-emerge from there, so the slot in the artwork needs to be at that height — or
-tell me where it is in your art and I move the number instead. Either way it has
-to match, or prints appear out of the wrong place.
+The **film slot** in the delivered artwork measures **75.24% down the body**,
+which is what the animation now uses — your art and the build already agree, so
+nothing here needs changing.
 
 ### Card frames — 1392 × 1539, two of them (BEFORE and AFTER)
 
@@ -150,12 +149,17 @@ assets. Real recordings are better; they are just not blocking.
 
 ## What I still do not have
 
-- The **camera body** and **card frame** exports, and the **printer body**
-  export, per the specs above. These are what actually block finishing.
+- The **printer body** export, per section 2. This is the only thing blocking.
 - The **form field list** for the invoice — not blocking, the layout works on
   placeholders until it arrives.
 - The **shutter recording** — not blocking either, the sound is synthesised in
   the browser meanwhile.
+
+**Arrived and in the build (10 Sep):** camera body and its four moving parts,
+and the card frame. Two things I fixed on my side rather than send back — the
+camera's rainbow stripe was baked into the card frame's top-right corner, and
+the body still had ~210px of margin each side, so I cropped it. Both will come
+back if those files are re-exported.
 
 Settled and no longer open: title and caption are live text (leave them off the
 frame), long item names wrap, the shutter does not have to be frame-accurate,
