@@ -3,12 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="A Polaroid camera that takes, ejects and develops a photo on click — one inline SVG animated with GSAP, no images and no CDN. Vanilla and React builds included.">
 <title>Polaroid Camera Animation — GSAP</title>
 <link rel="stylesheet" href="style.css">
+<style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}</style>
 </head>
 <body>
 
-<div class="wrap">
+<main class="wrap">
+
+  <h1 class="sr-only">Polaroid camera animation, built with GSAP</h1>
 
   <div class="stage" id="stage">
 
@@ -155,7 +159,7 @@
     <label class="snd"><input type="checkbox" id="sndToggle" checked> sound</label>
   </div>
 
-</div>
+</main>
 
 <script src="gsap.min.js"></script>
 <script src="app.js"></script>
