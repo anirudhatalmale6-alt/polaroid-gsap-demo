@@ -1,0 +1,1 @@
+const s={zoom:1,x:50,y:50};function e(n){return n?typeof n=="string"?n:n.src||null:null}function f(n){return n?typeof n=="string"?{src:n,...s}:{...s,...n}:null}function i(n){const t=f(n);if(!t)return;const r=`${t.x}% ${t.y}%`,o={objectPosition:r};return t.zoom&&t.zoom!==1&&(o.transform=`scale(${t.zoom})`,o.transformOrigin=r),o}export{s as D,f as a,i as f,e as s};
